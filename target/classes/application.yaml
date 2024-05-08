@@ -1,0 +1,37 @@
+server:
+  port: 8081
+spring:
+  main:
+    allow-circular-references: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/rent
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 3000
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  redis:
+    host: 192.168.64.200
+    port: 6379
+    password: root
+    timeout: 300
+    lettuce:
+      pool:
+        max-active: 15
+        max-idle: 12
+        min-idle: 1
+        time-between-eviction-runs: 1s
+        max-wait: 2000
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 30MB
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
