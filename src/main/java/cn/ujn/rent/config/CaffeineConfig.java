@@ -1,15 +1,21 @@
 package cn.ujn.rent.config;
 
-import cn.ujn.rent.bean.House;
-import cn.ujn.rent.bean.User;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+
 @Configuration
 public class CaffeineConfig {
 
+    @Bean
+    public Map<String,Timer> timerMap(){
+        return new HashMap<>();
+    }
     @Bean
     public Cache<String, Integer> eTagCache() {
         return Caffeine.newBuilder()

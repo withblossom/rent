@@ -1,6 +1,5 @@
 package cn.ujn.rent.service.impl;
 
-import cn.ujn.rent.bean.House;
 import cn.ujn.rent.bean.User;
 import cn.ujn.rent.bean.UserInfo;
 import cn.ujn.rent.error.RentException;
@@ -11,12 +10,9 @@ import cn.ujn.rent.utils.Checker;
 import cn.ujn.rent.utils.UserHolder;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import javax.annotation.Resource;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 

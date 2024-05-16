@@ -6,25 +6,18 @@ import cn.ujn.rent.bean.House;
 import cn.ujn.rent.bean.HouseInfo;
 import cn.ujn.rent.bean.User;
 import cn.ujn.rent.bean.dto.HouseDto;
-import cn.ujn.rent.cache.CacheManager;
 import cn.ujn.rent.cache.CacheService;
-import cn.ujn.rent.cache.caffeine.CaffeineCacheService;
 import cn.ujn.rent.error.RentException;
 import cn.ujn.rent.mapper.HouseMapper;
 import cn.ujn.rent.service.HouseInfoService;
 import cn.ujn.rent.service.HouseService;
 import cn.ujn.rent.service.UserService;
-import cn.ujn.rent.utils.Checker;
-import cn.ujn.rent.utils.Result;
 import cn.ujn.rent.utils.SystemConstants;
-import cn.ujn.rent.utils.UserHolder;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +28,7 @@ public class HouseServiceImpl implements HouseService {
 
     @Resource
     HouseMapper houseMapper;
+
     @Resource
     HouseInfoService houseInfoService;
     @Resource
@@ -64,7 +58,9 @@ public class HouseServiceImpl implements HouseService {
         House house = getHouseById(houseId);
         HouseDto houseDto = BeanUtil.copyProperties(house, HouseDto.class);
         User user = userService.getUserById(house.getOwner());
-        houseDto.setOwnerName(user.getUsername());
+        if(user != null){
+            houseDto.setOwnerName(user.getUsername());
+        }
 
         detailedInfo.setObj(houseDto);
         HouseInfo info = houseInfoService.getInfoByHouseId(houseId);
@@ -119,7 +115,9 @@ public class HouseServiceImpl implements HouseService {
         return housePage.getRecords().stream().map((house -> {
             User user = userService.getUserById(house.getOwner());
             HouseDto houseDto = BeanUtil.copyProperties(house, HouseDto.class);
-            houseDto.setOwnerName(user.getUsername());
+            if (user != null){
+                houseDto.setOwnerName(user.getUsername());
+            }
             return houseDto;
         })).collect(Collectors.toList());
     }
@@ -134,4 +132,10 @@ public class HouseServiceImpl implements HouseService {
     public List<House> getHouses(LambdaQueryWrapper<House> queryWrapper) {
         return houseMapper.selectList(queryWrapper);
     }
+
+    @Override
+    public Long countHouses(LambdaQueryWrapper<House> queryWrapper) {
+        return houseMapper.selectCount(queryWrapper);
+    }
+
 }

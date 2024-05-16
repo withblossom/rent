@@ -30,26 +30,22 @@ import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKN
 public class MVCConfig implements WebMvcConfigurer {
 
     @Resource
-    UserMapper userMapper;
-    @Resource
     Cache<String, Integer> eTagCache;
     @Resource
-    CacheService redisCacheService;
+    CacheService cacheManager;
     @Resource
     ObjectMapper objectMapper;
-    @Resource
-    StringRedisTemplate stringRedisTemplate;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        registry.addInterceptor(new LoginHeaderInterceptor(userMapper, redisCacheService))
+        registry.addInterceptor(new LoginHeaderInterceptor(cacheManager))
                 .excludePathPatterns(
                         "/user/login",
                         "/user/logout",
                         "/file/**"
                 );
-        registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate));
+        registry.addInterceptor(new RefreshTokenInterceptor(cacheManager));
         registry.addInterceptor(new CacheInterceptor(eTagCache));
     }
 

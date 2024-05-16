@@ -2,25 +2,12 @@ package cn.ujn.rent.controller;
 
 import cn.ujn.rent.bean.DetailedInfo;
 import cn.ujn.rent.bean.House;
-import cn.ujn.rent.bean.HouseInfo;
 import cn.ujn.rent.bean.dto.HouseDto;
-import cn.ujn.rent.error.RentException;
-import cn.ujn.rent.mapper.HouseInfoMapper;
-import cn.ujn.rent.mapper.HouseMapper;
 import cn.ujn.rent.service.HouseInfoService;
 import cn.ujn.rent.service.HouseService;
-import cn.ujn.rent.utils.Checker;
 import cn.ujn.rent.utils.Result;
-import cn.ujn.rent.utils.UserHolder;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController

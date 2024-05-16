@@ -4,7 +4,6 @@ import cn.ujn.rent.bean.HouseComment;
 import cn.ujn.rent.bean.dto.HouseCommentDto;
 import cn.ujn.rent.service.HouseCommentService;
 import cn.ujn.rent.utils.Result;
-import cn.ujn.rent.utils.UserHolder;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;

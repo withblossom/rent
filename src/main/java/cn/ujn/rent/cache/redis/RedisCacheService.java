@@ -1,19 +1,14 @@
 package cn.ujn.rent.cache.redis;
 
 import cn.ujn.rent.cache.CacheService;
-import cn.ujn.rent.error.RentException;
 import cn.ujn.rent.utils.SystemConstants;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.Resource;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -53,6 +48,16 @@ public class RedisCacheService implements CacheService {
         }
     }
 
+    @Override
+    public void expire(String key, long timeout, TimeUnit unit) {
+        try {
+            stringRedisTemplate.expire(key, timeout, unit);
+        } catch (DataAccessException e) {
+            System.out.println("redis--errer-----------------");
+        }
+    }
+
+    @Override
     public void putTtl(String key, Object value, long timeout, TimeUnit unit) {
         try {
             String jsonObj = objectMapper.writeValueAsString(value);

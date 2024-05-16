@@ -15,9 +15,7 @@ import cn.ujn.rent.utils.SystemConstants;
 import cn.ujn.rent.utils.UserHolder;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -114,14 +112,19 @@ public class HouseCommentServiceImpl implements HouseCommentService {
         }else {
             BeanUtil.copyProperties(houseComment, houseCommentDto);
         }
+
         if (house == null){
             house = houseService.getHouseById(houseComment.getHouseId());
         }
-        houseCommentDto.setHouseName(house.getName());
+        if (house != null){
+            houseCommentDto.setHouseName(house.getName());
+        }
         if (user == null){
             user = userService.getUserById(houseComment.getUserId());
         }
-        houseCommentDto.setUsername(user.getUsername());
+        if (user != null){
+            houseCommentDto.setUsername(user.getUsername());
+        }
         return houseCommentDto;
     }
 }

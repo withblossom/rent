@@ -2,7 +2,6 @@ package cn.ujn.rent.service;
 
 import cn.ujn.rent.bean.HouseComment;
 import cn.ujn.rent.bean.dto.HouseCommentDto;
-
 import java.util.List;
 
 public interface HouseCommentService {

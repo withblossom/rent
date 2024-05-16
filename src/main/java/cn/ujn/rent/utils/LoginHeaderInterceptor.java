@@ -1,9 +1,7 @@
 package cn.ujn.rent.utils;
 
 import cn.ujn.rent.bean.User;
-import cn.ujn.rent.cache.CacheManager;
 import cn.ujn.rent.cache.CacheService;
-import cn.ujn.rent.error.RentException;
 import cn.ujn.rent.mapper.UserMapper;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -13,13 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 public class LoginHeaderInterceptor implements HandlerInterceptor {
 
-    UserMapper userMapper;
+    CacheService cacheManager;
 
-    CacheService redisCacheService;
-
-    public LoginHeaderInterceptor(UserMapper userMapper, CacheService redisCacheService) {
-        this.userMapper = userMapper;
-        this.redisCacheService = redisCacheService;
+    public LoginHeaderInterceptor(CacheService cacheManager) {
+        this.cacheManager = cacheManager;
     }
 
     @Override
@@ -33,8 +28,8 @@ public class LoginHeaderInterceptor implements HandlerInterceptor {
             return false;
         }
         System.out.println("url: " + request.getRequestURL() + "  ==  token: " + token);
-        User user = (User) redisCacheService.get(SystemConstants.TOKEN_USER_SUFFIX + token, User.class);
-        if (user == null){
+        User user = (User) cacheManager.get(SystemConstants.TOKEN_USER_SUFFIX + token, User.class);
+        if (user == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }

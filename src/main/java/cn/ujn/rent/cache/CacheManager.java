@@ -2,14 +2,13 @@ package cn.ujn.rent.cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class CacheManager implements CacheService {
 
-    @Autowired(required = false)
+    @Autowired
     CacheService[] cacheServices;
 
     @Override
@@ -31,6 +30,21 @@ public class CacheManager implements CacheService {
             cacheService.put(key, value);
         }
     }
+
+    @Override
+    public void putTtl(String key, Object value, long timeout, TimeUnit unit) {
+        for (CacheService cacheService : cacheServices) {
+            cacheService.putTtl(key, value,timeout,unit);
+        }
+    }
+
+    @Override
+    public void expire(String key, long timeout, TimeUnit unit) {
+        for (CacheService cacheService : cacheServices) {
+            cacheService.expire(key,timeout,unit);
+        }
+    }
+
     @Override
     public void remove(String key) {
         for (CacheService cacheService : cacheServices) {

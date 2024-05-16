@@ -2,9 +2,7 @@ package cn.ujn.rent.service;
 
 import cn.ujn.rent.bean.DetailedInfo;
 import cn.ujn.rent.bean.House;
-import cn.ujn.rent.bean.User;
 import cn.ujn.rent.bean.dto.HouseDto;
-import cn.ujn.rent.utils.Result;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 
@@ -28,4 +26,6 @@ public interface HouseService {
     boolean updateHouse(LambdaUpdateWrapper<House> updateWrapper,Integer houseId);
 
     List<House> getHouses(LambdaQueryWrapper<House> queryWrapper);
+
+    Long countHouses(LambdaQueryWrapper<House> queryWrapper);
 }

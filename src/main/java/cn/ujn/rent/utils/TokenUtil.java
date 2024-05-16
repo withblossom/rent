@@ -1,8 +1,6 @@
 package cn.ujn.rent.utils;
 
 import cn.ujn.rent.bean.User;
-import lombok.Data;
-import lombok.Getter;
 
 public class TokenUtil {
 

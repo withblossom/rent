@@ -2,9 +2,7 @@ package cn.ujn.rent.utils;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

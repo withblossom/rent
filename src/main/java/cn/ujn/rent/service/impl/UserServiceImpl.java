@@ -1,15 +1,15 @@
 package cn.ujn.rent.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.ujn.rent.bean.User;
 import cn.ujn.rent.bean.DetailedInfo;
+import cn.ujn.rent.bean.House;
+import cn.ujn.rent.bean.User;
 import cn.ujn.rent.bean.UserInfo;
-import cn.ujn.rent.cache.CacheManager;
 import cn.ujn.rent.cache.CacheService;
-import cn.ujn.rent.cache.caffeine.CaffeineCacheService;
 import cn.ujn.rent.cache.redis.RedisCacheService;
 import cn.ujn.rent.error.RentException;
 import cn.ujn.rent.mapper.UserMapper;
+import cn.ujn.rent.service.HouseService;
 import cn.ujn.rent.service.UserInfoService;
 import cn.ujn.rent.service.UserService;
 import cn.ujn.rent.utils.*;
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Resource
     CacheService cacheManager;
     @Resource
-    RedisCacheService redisCacheService;
+    HouseService houseService;
 
     @Override
     public boolean register(User user) {
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
             RentException.cast("手机号或者密码错误！！！");
         }
         String token = TokenUtil.encrypt2Token(userSelected);
-        redisCacheService.putTtl(SystemConstants.TOKEN_USER_SUFFIX + token,userSelected,30, TimeUnit.MINUTES);
+        cacheManager.putTtl(SystemConstants.TOKEN_USER_SUFFIX + token, userSelected, 30, TimeUnit.MINUTES);
         return token;
     }
 
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUserById(User user, Integer userId) {
-        if (!userId.equals(UserHolder.getUser().getId())){
+        if (!userId.equals(UserHolder.getUser().getId())) {
             Checker.assertAdmin();
         }
 
@@ -150,11 +150,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteUserById(Integer userId) {
-        if (!userId.equals(UserHolder.getUser().getId())){
+        if (!userId.equals(UserHolder.getUser().getId())) {
             Checker.assertAdmin();
         }
         if (UserHolder.getUser().getId().equals(userId)) {
             RentException.cast("不能删除自己！！！");
+        }
+        LambdaQueryWrapper<House> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(House::getOwner, userId);
+        Long aLong = houseService.countHouses(queryWrapper);
+        if (aLong != null && aLong > 0) {
+            RentException.cast("该用户存在房产资源，不可删除！！！");
         }
         cacheManager.remove(SystemConstants.USER_CACHE_SUFFIX + userId);
         return userMapper.deleteById(userId) != 0;

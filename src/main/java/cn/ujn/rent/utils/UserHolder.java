@@ -1,6 +1,5 @@
 package cn.ujn.rent.utils;
 
-
 import cn.ujn.rent.bean.User;
 
 public class UserHolder {

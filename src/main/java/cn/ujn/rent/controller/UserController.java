@@ -1,25 +1,14 @@
 package cn.ujn.rent.controller;
 
 import cn.ujn.rent.bean.User;
-import cn.ujn.rent.bean.UserInfo;
-import cn.ujn.rent.error.RentException;
-import cn.ujn.rent.mapper.UserInfoMapper;
 import cn.ujn.rent.service.UserInfoService;
 import cn.ujn.rent.service.UserService;
-import cn.ujn.rent.utils.Checker;
 import cn.ujn.rent.utils.Result;
 import cn.ujn.rent.utils.UserHolder;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -69,7 +58,6 @@ public class UserController {
 
     @PostMapping("/logout")
     public Result logout() {
-        System.out.println("-----------------------------------------------");
         userService.logout();
         return Result.ok();
     }

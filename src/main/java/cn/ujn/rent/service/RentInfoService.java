@@ -2,7 +2,6 @@ package cn.ujn.rent.service;
 
 import cn.ujn.rent.bean.RentInfo;
 import cn.ujn.rent.bean.dto.RentInfoDto;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.List;
 

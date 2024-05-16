@@ -2,7 +2,6 @@ package cn.ujn.rent.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
 import java.util.List;
 
 @Data

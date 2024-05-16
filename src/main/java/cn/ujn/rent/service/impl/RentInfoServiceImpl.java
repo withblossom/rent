@@ -1,29 +1,21 @@
 package cn.ujn.rent.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import cn.ujn.rent.bean.House;
 import cn.ujn.rent.bean.RentInfo;
 import cn.ujn.rent.bean.User;
 import cn.ujn.rent.bean.dto.RentInfoDto;
 import cn.ujn.rent.cache.CacheService;
 import cn.ujn.rent.error.RentException;
-import cn.ujn.rent.mapper.HouseMapper;
 import cn.ujn.rent.mapper.RentInfoMapper;
-import cn.ujn.rent.mapper.UserMapper;
 import cn.ujn.rent.service.HouseService;
 import cn.ujn.rent.service.RentInfoService;
 import cn.ujn.rent.service.UserService;
-import cn.ujn.rent.utils.Checker;
 import cn.ujn.rent.utils.SystemConstants;
-import cn.ujn.rent.utils.UserHolder;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -157,6 +149,12 @@ public class RentInfoServiceImpl implements RentInfoService {
     public boolean updateRentById(RentInfo rentInfo, Integer rentId) {
         cacheManager.remove(SystemConstants.RENTINFO_CACHE_SUFFIX + rentId);
         rentInfo.setId(rentId);
+        if (rentInfo.getState() == SystemConstants.RentState.COMPLETED.ordinal()){
+            LambdaUpdateWrapper<House> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper.eq(House::getId,rentInfo.getHouseId());
+            updateWrapper.set(House::getState,SystemConstants.HouseState.FREE.ordinal());
+            houseService.updateHouse(updateWrapper,rentInfo.getHouseId());
+        }
         return rentInfoMapper.updateById(rentInfo) != 0;
     }
 
@@ -174,11 +172,15 @@ public class RentInfoServiceImpl implements RentInfoService {
         if (house == null) {
             house = houseService.getHouseById(houseId);
         }
-        rentInfoDto.setUnit(house.getUnit());
-        rentInfoDto.setTradingMode(house.getTradingMode());
-        rentInfoDto.setHouseName(house.getName());
-        rentInfoDto.setPhoneNumber(user.getPhoneNumber());
-        rentInfoDto.setUsername(user.getUsername());
+        if (user != null){
+            rentInfoDto.setPhoneNumber(user.getPhoneNumber());
+            rentInfoDto.setUsername(user.getUsername());
+        }
+        if (house != null) {
+            rentInfoDto.setUnit(house.getUnit());
+            rentInfoDto.setTradingMode(house.getTradingMode());
+            rentInfoDto.setHouseName(house.getName());
+        }
         return rentInfoDto;
     }
 }

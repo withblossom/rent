@@ -1,7 +1,6 @@
 package cn.ujn.rent.service;
 
 import cn.ujn.rent.bean.HouseInfo;
-
 import java.util.List;
 
 public interface HouseInfoService {
